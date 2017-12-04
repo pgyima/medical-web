@@ -1,0 +1,64 @@
+
+@model List<EMR.Models.Patient.Encounter>
+
+
+    <div style="background-color: #00BCD4; width:100%; padding:10px ">
+
+        @{
+    ViewData["Title"] = "Encounters";
+        }
+
+        <h2>Encounters </h2><hr />
+
+
+        @foreach (var item in Model)
+              {
+            <h4>Date of encounter:</h4>
+            <label>@item.Date</label><br /><br />
+            <br /><h4>Chief Complaints/HPI</h4>
+            @foreach (var c in item.ChiefComplaints) {
+
+                <label>@c</label><br />
+
+                   }
+
+            <hr />
+
+
+
+
+
+            <label>@item.HistoryIllness</label><br /><br /><hr />
+
+
+            <label>@item.PastHistory</label><br /><br />
+
+
+            <label>@item.Tests</label><br /><br />
+
+            <br /><h4>Physical Exam</h4>
+            <label>@item.PhysicalExam</label><br /><br /><hr />
+
+            <br /><h4>Diagnosis</h4>
+            <label>@item.Diagnosis</label><br /><br /><hr />
+
+            <br /><h4>Treatment Plan</h4>
+            <label>@item.Treatment</label><br /><br /><hr />
+
+
+            <label>@item.Prescriptions</label><br /><br />
+
+
+
+            <label>@item.Referrals</label><br /><br /><hr />
+
+
+
+
+            <hr /><hr />
+
+}
+
+    </div>
+
+

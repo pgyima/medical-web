@@ -1,0 +1,34 @@
+@model EMR.Models.Patient.Patient
+
+
+@{
+    ViewData["Title"] = "History of Present Illness";
+}
+
+<h3>History of Present Illness</h3>
+
+<br /><br />
+
+
+
+@using (Html.BeginForm("PastHistory", "ENCOUNTER", null))
+
+        {
+
+@Html.HiddenFor(model => model.Name)
+@Html.HiddenFor(model => model.Date)
+
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Chief complaint</legend>
+        
+        <div class="editor-field" >
+            @Html.TextAreaFor(model => model.HistoryIllness, 20, 200, new { HtmlAttributes = new { } })
+            @Html.ValidationMessageFor(model => model.HistoryIllness)
+        </div>
+
+    </fieldset>
+    <p>
+        <input type="submit" value="SUBMIT" />
+    </p>
+        }

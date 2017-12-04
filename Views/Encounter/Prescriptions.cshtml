@@ -1,0 +1,41 @@
+@model EMR.Models.Patient.Patient
+
+
+@{
+    ViewData["Title"] = "PRESCRIPTIONS";
+}
+
+
+
+<br /><br />
+
+
+
+@using (Html.BeginForm("Referrals", "ENCOUNTER", null))
+        {
+
+@Html.HiddenFor(model => model.Name)
+@Html.HiddenFor(model => model.Date)
+@Html.HiddenFor(model => model.HistoryIllness)
+@Html.HiddenFor(model => model.PastHistory)
+@Html.HiddenFor(model => model.PhysicalExam)
+@Html.HiddenFor(model => model.Tests)
+@Html.HiddenFor(model => model.Treatment)
+@Html.HiddenFor(model => model.Diagnosis)
+
+    @Html.HiddenFor(model => model.ChiefComplaints)
+
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Prescriptions</legend>
+
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Prescriptions, 20, 400, new { HtmlAttributes = new { } })
+            @Html.ValidationMessageFor(model => model.Prescriptions)
+        </div>
+
+    </fieldset>
+    <p>
+        <input type="submit" value="SUBMIT" />
+    </p>
+        }

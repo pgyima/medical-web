@@ -1,0 +1,1633 @@
+@model EMR.Models.Patient.Patient
+
+
+@{
+    ViewData["Title"] = "Encounter";
+}
+
+<div style="background-color: #00BCD4; width:100%; padding:10px ">
+
+
+    <br /><br />
+
+    @using (Html.BeginForm("SubmitFull1", "ENCOUNTER", null))
+
+        {
+
+        @Html.HiddenFor(model => model.Name)
+        @Html.ValidationSummary(true)
+<fieldset>
+    <h2>Encounter</h2><br /><hr />
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Date)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Date)
+        @Html.ValidationMessageFor(model => model.Date)
+    </div>
+    <hr />
+
+
+
+    
+    
+    <h3 onclick="toggleCC()" style="color:black" onmouseover="this.style.color = '#FFAB00'" onmouseout="this.style.color = 'black'">Chief Complaints</h3>
+    <div class="editor-field" id="CC" style="display:none">
+        @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+        @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+    </div >
+    
+
+    <script>
+        function toggleCC() {
+            var x = document.getElementById('CC');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+    </script>
+
+
+    <hr />
+    <h3 onclick="toggleHPI()" style="color:black" onmouseover="this.style.color = '#FFAB00'" onmouseout="this.style.color = 'black'">HPI</h3>
+    <div class="editor-field" id="HPI" style="display:none">
+        @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+        @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+    </div>
+
+
+    <script>
+        function toggleHPI() {
+            var x = document.getElementById('HPI');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+    </script>
+
+
+
+
+
+    <hr />
+
+
+
+
+
+    <h3 onclick="toggleProblems()" style="color:black" onmouseover="this.style.color = '#FFAB00'" onmouseout="this.style.color = 'black'">Problems</h3><br />
+    <script>
+        function toggleProblems() {
+            var x = document.getElementById('Problems');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+    </script>
+
+
+    <div id="Problems" style="display:none">
+
+        
+
+    <script src="~/lib/knockout/dist/knockout.debug.js" type="text/javascript"></script>
+    <script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/vue"></script>
+
+
+    <script type="text/javascript">
+
+        var SimpleListModel = function () {
+            this.itemToAdd = ko.observable("");
+            this.allItems = ko.observableArray([]); // Initial items
+            this.selectedItems = ko.observableArray([]);                                // Initial selection
+
+            this.addItem = function () {
+                if ((this.itemToAdd() != "") && (this.allItems.indexOf(this.itemToAdd()) < 0)) // Prevent blanks and duplicates
+                    this.allItems.push(this.itemToAdd());
+                this.itemToAdd(""); // Clear the text box
+            };
+
+            this.removeSelected = function () {
+                this.allItems.removeAll(this.selectedItems());
+                this.selectedItems([]); // Clear selection
+            };
+
+            this.sortItems = function () {
+                this.allItems.sort();
+            };
+
+
+            this.itemToAdd1 = ko.observable("");
+            this.allItems1 = ko.observableArray([]); // Initial items
+            this.selectedItems1 = ko.observableArray([]);                                // Initial selection
+
+            this.addItem1 = function () {
+                if ((this.itemToAdd1() != "") && (this.allItems1.indexOf(this.itemToAdd1()) < 0)) // Prevent blanks and duplicates
+                    this.allItems1.push(this.itemToAdd1());
+                this.itemToAdd1(""); // Clear the text box
+            };
+
+            this.removeSelected1 = function () {
+                this.allItems1.removeAll(this.selectedItems1());
+                this.selectedItems1([]); // Clear selection
+            };
+
+            this.sortItems1 = function () {
+                this.allItems1.sort();
+            };
+
+
+
+
+
+            this.itemToAdd_HE_P_HEENT = ko.observable("");
+            this.allItems_HE_P_HEENT = ko.observableArray([]); // Initial items
+            this.selectedItems_HE_P_HEENT = ko.observableArray([]);                                // Initial selection
+
+            this.addItem_HE_P_HEENT = function () {
+                if ((this.itemToAdd_HE_P_HEENT() != "") && (this.allItems_HE_P_HEENT.indexOf(this.itemToAdd_HE_P_HEENT()) < 0)) // Prevent blanks and duplicates
+                    this.allItems_HE_P_HEENT.push(this.itemToAdd_HE_P_HEENT());
+                this.itemToAdd_HE_P_HEENT(""); // Clear the text box
+            };
+
+            this.removeSelected_HE_P_HEENT = function () {
+                this.allItems_HE_P_HEENT.removeAll(this.selectedItems_HE_P_HEENT());
+                this.selectedItems_HE_P_HEENT([]); // Clear selection
+            };
+
+            this.sortItems_HE_P_HEENT = function () {
+                this.allItems_HE_P_HEENT.sort();
+            };
+
+
+
+
+            this.itemToAdd_HE_N_HEENT = ko.observable("");
+            this.allItems_HE_N_HEENT = ko.observableArray([]); // Initial items
+            this.selectedItems_HE_N_HEENT = ko.observableArray([]);                                // Initial selection
+
+            this.addItem_HE_N_HEENT = function () {
+               // if ((this.itemToAdd_HE_P_HEENT() != "") && (this.allItems_HE_N_HEENT.indexOf(this.itemToAdd_HE_P_HEENT()) < 0)) // Prevent blanks and duplicates
+                    this.allItems_HE_N_HEENT.push(this.itemToAdd_HE_P_HEENT());
+                this.itemToAdd_HE_P_HEENT(""); // Clear the text box
+            };
+
+            this.removeSelected_HE_N_HEENT = function () {
+                this.allItems_HE_N_HEENT.removeAll(this.selectedItems_HE_N_HEENT());
+                this.selectedItems_HE_N_HEENT([]); // Clear selection
+            };
+
+            this.sortItems_HE_N_HEENT = function () {
+                this.allItems_HE_N_HEENT.sort();
+            };
+
+
+
+
+
+            this.itemToAdd_P_cardio = ko.observable("");
+            this.allItems_P_cardio = ko.observableArray([]); // Initial items
+            this.selectedItems_P_cardio = ko.observableArray([]);                                // Initial selection
+
+            this.addItem_P_cardio = function () {
+                if ((this.itemToAdd_P_cardio() != "") && (this.allItems_P_cardio.indexOf(this.itemToAdd_P_cardio()) < 0)) // Prevent blanks and duplicates
+                    this.allItems_P_cardio.push(this.itemToAdd_P_cardio());
+                this.itemToAdd_P_cardio(""); // Clear the text box
+            };
+
+            this.removeSelected_P_cardio = function () {
+                this.allItems_P_cardio.removeAll(this.selectedItems_P_cardio());
+                this.selectedItems_P_cardio([]); // Clear selection
+            };
+
+            this.sortItems_P_cardio = function () {
+                this.allItems_P_cardio.sort();
+            };
+
+
+
+
+            this.itemToAdd_N_cardio = ko.observable("");
+            this.allItems_N_cardio = ko.observableArray([]); // Initial items
+            this.selectedItems_N_cardio = ko.observableArray([]);                                // Initial selection
+
+            this.addItem_N_cardio = function () {
+                // if ((this.itemToAdd_HE_P_HEENT() != "") && (this.allItems_HE_N_HEENT.indexOf(this.itemToAdd_HE_P_HEENT()) < 0)) // Prevent blanks and duplicates
+                this.allItems_N_cardio.push(this.itemToAdd_P_cardio());
+                this.itemToAdd_P_cardio(""); // Clear the text box
+            };
+
+            this.removeSelected_N_cardio = function () {
+                this.allItems_N_cardio.removeAll(this.selectedItems_N_cardio());
+                this.selectedItems_N_cardio([]); // Clear selection
+            };
+
+            this.sortItems_N_cardio = function () {
+                this.allItems_N_cardio.sort();
+            };
+
+
+
+            this.itemToAdd_P_neuro = ko.observable("");
+            this.allItems_P_neuro = ko.observableArray([]); // Initial items
+            this.selectedItems_P_neuro = ko.observableArray([]);                                // Initial selection
+
+            this.addItem_P_neuro = function () {
+                if ((this.itemToAdd_P_neuro() != "") && (this.allItems_P_neuro.indexOf(this.itemToAdd_P_neuro()) < 0)) // Prevent blanks and duplicates
+                    this.allItems_P_neuro.push(this.itemToAdd_P_neuro());
+                this.itemToAdd_P_neuro(""); // Clear the text box
+            };
+
+            this.removeSelected_P_neuro = function () {
+                this.allItems_P_neuro.removeAll(this.selectedItems_P_neuro());
+                this.selectedItems_P_neuro([]); // Clear selection
+            };
+
+            this.sortItems_P_neuro = function () {
+                this.allItems_P_neuro.sort();
+            };
+
+
+
+
+            this.itemToAdd_N_neuro = ko.observable("");
+            this.allItems_N_neuro = ko.observableArray([]); // Initial items
+            this.selectedItems_N_neuro = ko.observableArray([]);                                // Initial selection
+
+            this.addItem_N_neuro = function () {
+                // if ((this.itemToAdd_HE_P_HEENT() != "") && (this.allItems_HE_N_HEENT.indexOf(this.itemToAdd_HE_P_HEENT()) < 0)) // Prevent blanks and duplicates
+                this.allItems_N_neuro.push(this.itemToAdd_P_neuro());
+                this.itemToAdd_P_neuro(""); // Clear the text box
+            };
+
+            this.removeSelected_N_neuro = function () {
+                this.allItems_N_neuro.removeAll(this.selectedItems_N_neuro());
+                this.selectedItems_N_neuro([]); // Clear selection
+            };
+
+            this.sortItems_N_neuro = function () {
+                this.allItems_N_neuro.sort();
+            };
+
+
+
+
+
+
+
+            this.itemToAdd_P_pain = ko.observable("");
+            this.allItems_P_pain = ko.observableArray([]); // Initial items
+            this.selectedItems_P_pain = ko.observableArray([]);                                // Initial selection
+            this.addItem_P_pain = function () {
+                if ((this.itemToAdd_P_pain() != "") && (this.allItems_P_pain.indexOf(this.itemToAdd_P_pain()) < 0)) // Prevent blanks and duplicates
+                    this.allItems_P_pain.push(this.itemToAdd_P_pain());
+                this.itemToAdd_P_pain(""); // Clear the text box
+            };
+            this.removeSelected_P_pain = function () {
+                this.allItems_P_pain.removeAll(this.selectedItems_P_pain());
+                this.selectedItems_P_pain([]); // Clear selection
+            };
+            this.sortItems_P_pain = function () {
+                this.allItems_P_pain.sort();
+            };
+
+            this.itemToAdd_N_pain = ko.observable("");
+            this.allItems_N_pain = ko.observableArray([]); // Initial items
+            this.selectedItems_N_pain = ko.observableArray([]);                                // Initial selection
+            this.addItem_N_pain = function () {
+                // if ((this.itemToAdd_HE_P_HEENT() != "") && (this.allItems_HE_N_HEENT.indexOf(this.itemToAdd_HE_P_HEENT()) < 0)) // Prevent blanks and duplicates
+                this.allItems_N_pain.push(this.itemToAdd_P_pain());
+                this.itemToAdd_P_pain(""); // Clear the text box
+            };       
+            this.removeSelected_N_pain = function () {
+                this.allItems_N_pain.removeAll(this.selectedItems_N_pain());
+                this.selectedItems_N_pain([]); // Clear selection
+            };
+            this.sortItems_N_pain = function () {
+                this.allItems_N_pain.sort();
+            };
+
+
+
+
+
+            this.itemToAdd_P_constitutional = ko.observable("");
+            this.allItems_P_constitutional = ko.observableArray([]); // Initial items
+            this.selectedItems_P_constitutional = ko.observableArray([]);                                // Initial selection
+            this.addItem_P_constitutional = function () {
+                if ((this.itemToAdd_P_constitutional() != "") && (this.allItems_P_constitutional.indexOf(this.itemToAdd_P_constitutional()) < 0)) // Prevent blanks and duplicates
+                    this.allItems_P_constitutional.push(this.itemToAdd_P_constitutional());
+                this.itemToAdd_P_constitutional(""); // Clear the text box
+            };
+            this.removeSelected_P_constitutional = function () {
+                this.allItems_P_constitutional.removeAll(this.selectedItems_P_constitutional());
+                this.selectedItems_P_constitutional([]); // Clear selection
+            };
+            this.sortItems_P_constitutional = function () {
+                this.allItems_P_constitutional.sort();
+            };
+
+            this.itemToAdd_N_constitutional = ko.observable("");
+            this.allItems_N_constitutional = ko.observableArray([]); // Initial items
+            this.selectedItems_N_constitutional = ko.observableArray([]);                                // Initial selection
+            this.addItem_N_constitutional = function () {
+                // if ((this.itemToAdd_HE_P_HEENT() != "") && (this.allItems_HE_N_HEENT.indexOf(this.itemToAdd_HE_P_HEENT()) < 0)) // Prevent blanks and duplicates
+                this.allItems_N_constitutional.push(this.itemToAdd_P_constitutional());
+                this.itemToAdd_P_constitutional(""); // Clear the text box
+            };
+            this.removeSelected_N_constitutional = function () {
+                this.allItems_N_constitutional.removeAll(this.selectedItems_N_constitutional());
+                this.selectedItems_N_constitutional([]); // Clear selection
+            };
+            this.sortItems_N_constitutional = function () {
+                this.allItems_N_constitutional.sort();
+            };
+
+
+
+
+
+
+            this.itemToAdd_HE_P = ko.observable("");
+            this.allItems_HE_P = ko.observableArray([]); // Initial items
+            this.selectedItems_HE_P = ko.observableArray([]);                                // Initial selection
+
+            this.addItem_HE_P = function () {
+                if ((this.itemToAdd_HE_P() != "") && (this.allItems_HE_P.indexOf(this.itemToAdd_HE_P()) < 0)) // Prevent blanks and duplicates
+                    this.allItems_HE_P.push(this.itemToAdd_HE_P());
+                this.itemToAdd_HE_P(""); // Clear the text box
+            };
+
+            this.removeSelected_HE_P = function () {
+                this.allItems_HE_P.removeAll(this.selectedItems_HE_P());
+                this.selectedItems_HE_P([]); // Clear selection
+            };
+
+            this.sortItems_HE_P = function () {
+                this.allItems_HE_P.sort();
+            };
+
+
+
+
+
+
+
+            this.itemToAdd_HE_N = ko.observable("");
+            this.allItems_HE_N = ko.observableArray([]); // Initial items
+            this.selectedItems_HE_N = ko.observableArray([]);                                // Initial selection
+
+            this.addItem_HE_N = function () {
+                if ((this.itemToAdd_HE_N() != "") && (this.allItems_HE_N.indexOf(this.itemToAdd_HE_N()) < 0)) // Prevent blanks and duplicates
+                    this.allItems_HE_N.push(this.itemToAdd_HE_N());
+                this.itemToAdd_HE_N(""); // Clear the text box
+            };
+
+            this.removeSelected_HE_N = function () {
+                this.allItems_HE_N.removeAll(this.selectedItems_HE_N());
+                this.selectedItems_HE_N([]); // Clear selection
+            };
+
+            this.sortItems_HE_N = function () {
+                this.allItems_HE_N.sort();
+            };
+
+
+
+        };
+
+
+
+
+        $(document).ready(function () {
+            ko.applyBindings(new SimpleListModel(["Alpha", "Beta", "Gamma"]));
+        })
+
+
+
+    </script>
+
+
+
+    <form data-bind="submit:addItem">
+        Add illness: <input type="text" data-bind='value:itemToAdd, valueUpdate: "afterkeydown"' />
+        <button data-bind="click: addItem">Add</button>
+    </form>
+
+    <br /><br />
+    <select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems, selectedOptions:selectedItems"> </select>
+
+    <div>
+        <button data-bind="click: removeSelected, enable: selectedItems().length > 0">Remove</button>
+        <button data-bind="click: sortItems, enable: allItems().length > 1">Sort</button>
+    </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <hr />
+
+    
+    
+
+    
+
+
+
+
+
+
+
+
+        <h3 onclick="toggleVitals()" style="color:black" onmouseover="this.style.color = '#FFAB00'" onmouseout="this.style.color = 'black'">Vitals</h3>
+        <script>
+            function toggleVitals() {
+                var x = document.getElementById('Vitals');
+                if (x.style.display === 'none') {
+                    x.style.display = 'block';
+                } else {
+                    x.style.display = 'none';
+                }
+            }
+        </script>
+        <div id="Vitals" style="display:none">
+            Temperature
+            @Html.EditorFor(model => model.Diagnosis)
+            F
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            Pulse
+            @Html.EditorFor(model => model.Referrals)
+            /min
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            BP-Systolic
+            @Html.EditorFor(model => model.Diagnosis)
+            mmHg
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            BP-Diastolic
+            @Html.EditorFor(model => model.Diagnosis)
+            mmHg
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            Height
+            @Html.EditorFor(model => model.Diagnosis)
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            Weight
+            @Html.EditorFor(model => model.Diagnosis)
+            lbs
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            BMI
+            @Html.EditorFor(model => model.Diagnosis)
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            BSA
+            @Html.EditorFor(model => model.Diagnosis)
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            O2-Saturation
+            @Html.EditorFor(model => model.Diagnosis)
+            % room air
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            Glucose Level
+            @Html.EditorFor(model => model.Diagnosis)
+            mg/dl
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            Position
+            @Html.EditorFor(model => model.Diagnosis)
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <hr />
+
+
+
+
+
+
+
+
+
+
+
+
+    <h3 onclick="toggleMeds()" style="color:black" onmouseover="this.style.color = '#FFAB00'" onmouseout="this.style.color = 'black'">Current Medications</h3>
+    <script>
+        function toggleMeds() {
+            var x = document.getElementById('Meds');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+    </script>
+    <div id="Meds" style="display:none">
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+            @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+        </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <hr />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h3 onclick="toggleAllegies()" style="color:black" onmouseover="this.style.color = '#FFAB00'" onmouseout="this.style.color = 'black'">Allergies</h3>
+    <script>
+        function toggleAllergies() {
+            var x = document.getElementById('Allergies');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+    </script>
+    <div id="Allergies" style="display:none">
+
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+            @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+        </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <hr />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <h3 onclick="toggleHistory()" style="color:black" onmouseover="this.style.color = '#FFAB00'" onmouseout="this.style.color = 'black'">History</h3>
+        <script>
+            function toggleHistory() {
+                var x = document.getElementById('History');
+                if (x.style.display === 'none') {
+                    x.style.display = 'block';
+                } else {
+                    x.style.display = 'none';
+                }
+            }
+        </script>
+        <div id="History" style="display:none">
+            <h4>Past medical history</h4>
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+                @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+            </div>
+            <h4>Past social history</h4>
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+                @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+            </div>
+            <h4>Past family history</h4>
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+                @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <hr />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h3 onclick="toggleROS()" style="color:black" onmouseover="this.style.color = '#FFAB00'" onmouseout="this.style.color = 'black'">Review of Systems</h3>
+    <script>
+        function toggleROS() {
+            var x = document.getElementById('ROS');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+    </script>
+    <div id="ROS" style="display:none">
+
+
+
+
+        <script>
+            function toggle() {
+                var x = document.getElementById('myDIV');
+                if (x.style.display === 'none') {
+                    x.style.display = 'block';
+                } else {
+                    x.style.display = 'none';
+                }
+            }
+        </script>
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+
+            <h4 onclick="toggle()" style="color:black"
+                onmouseover="this.style.color = '#FFAB00'"
+                onmouseout="this.style.color = 'black'">
+                HEENT
+            </h4>
+
+
+            <div id="myDIV" style="display:none">
+                <form data-bind="submit:addItem_HE_P_HEENT">
+                    <input type="text" data-bind='value:itemToAdd_HE_P_HEENT, valueUpdate: "afterkeydown"' />
+                    <button data-bind="click: addItem_HE_P_HEENT">+</button>
+                    <button data-bind="click: addItem_HE_N_HEENT">-</button>
+                </form>
+                <br />
+
+                <div>
+                    <input type="checkbox" id="check_HEENT" name="check_HEENT" value="check_HEENT">
+                    <label for="check_HEENT">No abnormalities verbalized</label>
+                </div>
+
+                <br /><br />
+                POSITIVE FOR:<select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems_HE_P_HEENT, selectedOptions:selectedItems_HE_P_HEENT"> </select>
+                <button data-bind="click: removeSelected_HE_P_HEENT, enable: selectedItems_HE_P_HEENT().length > 0">Remove</button>
+               
+
+
+
+                <br /><br />NEGATIVE FOR:
+                <select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems_HE_N_HEENT, selectedOptions:selectedItems_HE_N_HEENT"> </select>
+
+                
+                    <button data-bind="click: removeSelected_HE_N_HEENT, enable: selectedItems_HE_N_HEENT().length > 0">Remove</button>
+
+                <br />
+
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+        <script>
+             function toggle_cardio() {
+                 var x = document.getElementById('x_cardio');
+                 if (x.style.display === 'none') {
+                     x.style.display = 'block';
+                 } else {
+                     x.style.display = 'none';
+                 }
+             }
+        </script>
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+
+            <h4 onclick="toggle_cardio()" style="color:black"
+                onmouseover="this.style.color = '#FFAB00'"
+                onmouseout="this.style.color = 'black'">
+                Cardiovascular
+            </h4>
+
+
+            <div id="x_cardio" style="display:none">
+                <form data-bind="submit:addItem_P_cardio">
+                    <input type="text" data-bind='value:itemToAdd_P_cardio, valueUpdate: "afterkeydown"' />
+                    <button data-bind="click: addItem_P_cardio">+</button>
+                    <button data-bind="click: addItem_N_cardio">-</button>
+                </form>
+
+                <br />
+                <div>
+                    <input type="checkbox" id="check_cardio" name="check_cardio" value="check_cardio">
+                    <label for="check_cardio">No abnormalities verbalized</label>
+                </div>
+                <br /><br />
+                POSITIVE FOR:<select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems_P_cardio, selectedOptions:selectedItems_P_cardio"> </select>
+                <button data-bind="click: removeSelected_P_cardio, enable: selectedItems_P_cardio().length > 0">Remove</button>
+
+
+
+
+                <br /><br />NEGATIVE FOR:
+                <select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems_N_cardio, selectedOptions:selectedItems_N_cardio"> </select>
+
+
+                <button data-bind="click: removeSelected_N_cardio, enable: selectedItems_N_cardio().length > 0">Remove</button>
+
+                <br />
+
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+        <script>
+           function toggle_neuro() {
+               var x = document.getElementById('x_neuro');
+               if (x.style.display === 'none') {
+                   x.style.display = 'block';
+               } else {
+                   x.style.display = 'none';
+               }
+           }
+        </script>
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+
+            <h4 onclick="toggle_neuro()" style="color:black"
+                onmouseover="this.style.color = '#FFAB00'"
+                onmouseout="this.style.color = 'black'">
+                Neurology
+            </h4>
+
+
+            <div id="x_neuro" style="display:none">
+                <form data-bind="submit:addItem_P_neuro">
+                    <input type="text" data-bind='value:itemToAdd_P_neuro, valueUpdate: "afterkeydown"' />
+                    <button data-bind="click: addItem_P_neuro">+</button>
+                    <button data-bind="click: addItem_N_neuro">-</button>
+                </form>
+
+                <br /><br />
+                POSITIVE FOR:<select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems_P_neuro, selectedOptions:selectedItems_P_neuro"> </select>
+                <button data-bind="click: removeSelected_P_neuro, enable: selectedItems_P_neuro().length > 0">Remove</button>
+
+
+
+
+                <br /><br />NEGATIVE FOR:
+                <select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems_N_neuro, selectedOptions:selectedItems_N_neuro"> </select>
+
+
+                <button data-bind="click: removeSelected_N_neuro, enable: selectedItems_N_neuro().length > 0">Remove</button>
+
+                <br />
+
+
+            </div>
+
+        </div>
+
+
+
+
+
+        
+
+
+        <script>
+            function toggle_pain() {
+                var x = document.getElementById('x_pain');
+                if (x.style.display === 'none') {
+                    x.style.display = 'block';
+                } else {
+                    x.style.display = 'none';
+                }
+            }
+        </script>
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+
+            <h4 onclick="toggle_pain()" style="color:black"
+                onmouseover="this.style.color = '#FFAB00'"
+                onmouseout="this.style.color = 'black'">
+                Pain
+            </h4>
+
+
+            <div id="x_pain" style="display:none">
+                <form data-bind="submit:addItem_P_pain">
+                    <input type="text" data-bind='value:itemToAdd_P_pain, valueUpdate: "afterkeydown"' />
+                    <button data-bind="click: addItem_P_pain">+</button>
+                    <button data-bind="click: addItem_N_pain">-</button>
+                </form>
+
+                <br /><br />
+                POSITIVE FOR:<select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems_P_pain, selectedOptions:selectedItems_P_pain"> </select>
+                <button data-bind="click: removeSelected_P_pain, enable: selectedItems_P_pain().length > 0">Remove</button>
+
+
+                <br /><br />NEGATIVE FOR:
+                <select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems_N_pain, selectedOptions:selectedItems_N_pain"> </select>
+                <button data-bind="click: removeSelected_N_pain, enable: selectedItems_N_pain().length > 0">Remove</button>
+                <br />
+            </div>
+        </div>
+
+
+
+        
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Pain Functional Impairment</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+        <script>
+            function toggle_constitutional() {
+                var x = document.getElementById('x_constitutional');
+                if (x.style.display === 'none') {
+                    x.style.display = 'block';
+                } else {
+                    x.style.display = 'none';
+                }
+            }
+        </script>
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+
+            <h4 onclick="toggle_constitutional()" style="color:black"
+                onmouseover="this.style.color = '#FFAB00'"
+                onmouseout="this.style.color = 'black'">
+                Constitutional
+            </h4>
+
+            <div id="x_constitutional" style="display:none">
+                <form data-bind="submit:addItem_P_constitutional">
+                    <input type="text" data-bind='value:itemToAdd_P_constitutional, valueUpdate: "afterkeydown"' />
+                    <button data-bind="click: addItem_P_constitutional">+</button>
+                    <button data-bind="click: addItem_N_constitutional">-</button>
+                </form>
+
+                <br /><br />
+                POSITIVE FOR:<select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems_P_constitutional, selectedOptions:selectedItems_P_constitutional"> </select>
+                <button data-bind="click: removeSelected_P_constitutional, enable: selectedItems_P_constitutional().length > 0">Remove</button>
+
+                <br /><br />NEGATIVE FOR:
+                <select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems_N_constitutional, selectedOptions:selectedItems_N_constitutional"> </select>
+                <button data-bind="click: removeSelected_N_constitutional, enable: selectedItems_N_constitutional().length > 0">Remove</button>
+                <br />
+            </div>
+        </div>
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Skin</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Respiratory System</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Gastroenterology</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Hematology</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Urinary System</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Musculoskeletal</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Endocrinology</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Gynecology</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Psychiatry</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Allergy/Immunology</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Genitourinary</h4>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        <div style="border: 2px solid; border-color:#2172ce; padding: 20px;
+    margin: 20px;">
+            <h4>Other</h4>
+
+
+        </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <hr />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h3 onclick="togglePE()" style="color:black" onmouseover="this.style.color = '#FFAB00'" onmouseout="this.style.color = 'black'">Physical Exam</h3>
+    <script>
+        function togglePE() {
+            var x = document.getElementById('PE');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+    </script>
+    <div id="PE" style="display:none">
+
+
+
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+            @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+        </div>
+        <br />
+        <div>
+            <input type="checkbox" id="check_PE" name="check_PE" value="check_PE">
+            <label for="check_PE">No abnormalities found</label>
+        </div>
+        <br />
+
+        
+        <button id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">General</button>
+        <script>
+            function toggle_PE_general() {
+                var x = document.getElementById('PE_general');
+                var y = document.getElementById('PE_general_button');
+                var z = document.getElementsByClassName("PE_button");
+                var w = document.getElementsByClassName("PE_box")
+                if (x.style.display === 'none') {
+                    for (var j = 0; j < w.length; j++) {
+                        w[j].style.display = 'none';
+                    }
+                    x.style.display = 'block';
+                    for (var i = 0; i < z.length; i++) {
+                        z[i].style.backgroundColor = "#e7e7e7";
+                    }
+                    y.style.backgroundColor = "#FFAB00";
+                } else {
+                    x.style.display = 'none';
+                    y.style.backgroundColor = "#e7e7e7";
+                }
+            }
+        </script>
+
+        <button id ="PE_resp_button" type="button" onclick="toggle_PE_resp()"
+                class="PE_button">Respiratory</button>
+        <script>
+            function toggle_PE_resp() {
+                var x = document.getElementById('PE_resp');
+                var y = document.getElementById('PE_resp_button');
+                var z = document.getElementsByClassName("PE_button");
+                var w = document.getElementsByClassName("PE_box")
+                if (x.style.display === 'none') {
+                    for (var j = 0; j < w.length; j++) {
+                        w[j].style.display = 'none';
+                    }
+                    x.style.display = 'block';
+                    for (var i = 0; i < z.length; i++) {
+                        z[i].style.backgroundColor = "#e7e7e7";
+                    }
+                    y.style.backgroundColor = "#FFAB00";
+                } else {
+                    x.style.display = 'none';
+                    y.style.backgroundColor = "#e7e7e7";
+                }
+            }
+        </script>
+
+        <button id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Cardiovascular</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Neurological Systems</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Head & Neck</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Eyes</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Ear / Nose / Throat</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Lymphatic System</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Skin</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Abdomen</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Extremities</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Back</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Genitalia (common)</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Rectum</button>
+        <button  id ="PE_general_button" type="button" onclick="toggle_PE_general()"
+                class="PE_button">Pain Scale</button>
+
+        <div id="PE_general" style="display:none; border: 2px solid; border-color:#2172ce; padding: 10px;
+    margin: 20px;" class="PE_box">
+            <br />
+        <form>
+            <fieldset>
+                <legend>Attitude</legend>
+                <div>
+                    <input type="checkbox" id="coding" name="interest" value="coding">
+                    <label for="coding">Cooperative</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="music" name="interest" value="music">
+                    <label for="music">Uncooperative</label>
+                </div>
+                </fieldset>
+            <fieldset>
+                <legend>Appearance</legend>
+                <div>
+                    <input type="checkbox" id="coding" name="interest" value="coding">
+                    <label for="coding">Does not appear acutely ill</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="music" name="interest" value="music">
+                    <label for="music">Acutely ill</label>
+                </div>
+            </fieldset>
+            </form>
+        </div>
+
+        <div id="PE_resp" style="display:none; border: 2px solid; border-color:#2172ce; padding: 10px;
+    margin: 20px;" class="PE_box">
+            <br />
+            <form>
+                <fieldset>
+                    <legend>Bony Thorax</legend>
+                    <div>
+                        <input type="checkbox" id="coding" name="interest" value="coding">
+                        <label for="coding">The bony thorax is intact without deformities</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="music" name="interest" value="music">
+                        <label for="music">A pectus excavatum</label>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Chest Expansion</legend>
+                    <div>
+                        <input type="checkbox" id="coding" name="interest" value="coding">
+                        <label for="coding">There is symmetrical chest expansion bilaterally</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="music" name="interest" value="music">
+                        <label for="music">Restricted chest expansion</label>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <hr />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+    <h3 onclick="toggleDiagnosis5()" style="color:black" onmouseover="this.style.color = '#FFAB00'" onmouseout="this.style.color = 'black'">Diagnosis</h3>
+    <script>
+        function toggleDiagnosis5() {
+            var x = document.getElementById('Diagnosis5');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+    </script>
+    <div id="Diagnosis5" style="display:none">
+        <form data-bind="submit:addItem1">
+            <input type="text" data-bind='value:itemToAdd1, valueUpdate: "afterkeydown"' />
+            <button data-bind="click: addItem1">Add</button>
+        </form>
+
+        <br /><br />
+        <select style="height:200px" multiple="multiple" height="100" data-bind="options:allItems1, selectedOptions:selectedItems1"> </select>
+
+        <div>
+            <button data-bind="click: removeSelected1, enable: selectedItems1().length > 0">Remove</button>
+            <button data-bind="click: sortItems1, enable: allItems1().length > 1">Sort</button>
+        </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <hr />
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h3 onclick="togglePlan()" style="color:black" onmouseover="this.style.color = '#FFAB00'" onmouseout="this.style.color = 'black'">Treatment Plan</h3>
+    <script>
+        function togglePlan() {
+            var x = document.getElementById('Plan');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+    </script>
+    <div id="Plan" style="display:none">
+
+        <h4>Medication</h4>
+        <div>
+            <input type="checkbox" id="check_med" name="check_med" value="check_med">
+            <label for="check_med">Refill all meds</label>
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+            @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+        </div>
+        <br />
+        <h4>Labs</h4>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+            @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+        </div>
+        <br />
+        <h4>Referrals</h4>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+            @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+        </div>
+        <br />
+        <h4>Special instructions</h4>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.ChiefComplaintsStr, 5, 100, new { HtmlAttributes = new { } })
+            @Html.ValidationMessageFor(model => model.ChiefComplaintsStr)
+        </div>
+
+
+
+
+        </div>
+
+
+
+
+</fieldset>
+        <br /><br /><hr />
+        <p>
+            <input type="submit" value="SUBMIT" />
+        </p>
+        }
+
+
+
+
+
+
+
+
+</div>
